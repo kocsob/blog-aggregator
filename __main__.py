@@ -1,7 +1,37 @@
+import argparse
 import logging
 
 
 logger = logging.getLogger()
+
+
+def get_arguments():
+    parser = argparse.ArgumentParser(description='Blog aggregator')
+    parser.add_argument(
+        '-i',
+        '--input',
+        action='store',
+        default='/data/input',
+        dest='input',
+        help="input file or directory"
+    )
+    parser.add_argument(
+        '-o',
+        '--output',
+        action='store',
+        default='/data/output',
+        dest='output',
+        help="output file or directory"
+    )
+    parser.add_argument(
+        '-log',
+        '--log-level',
+        action='store',
+        default='INFO',
+        dest='log_level',
+        help="console log level: DEBUG | INFO | WARNING | ERROR | CRITICAL | NOTSET (default: INFO)"
+    )
+    return parser.parse_args()
 
 
 def configure_logging(log_level="INFO"):
@@ -21,7 +51,8 @@ def configure_logging(log_level="INFO"):
 
 
 def main():
-    configure_logging()
+    args = get_arguments()
+    configure_logging(args.log_level)
     logger.info('info')
 
 if __name__ == '__main__':
