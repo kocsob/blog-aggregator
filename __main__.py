@@ -1,4 +1,5 @@
 import argparse
+import json
 import logging
 
 from blog_aggregator import BlogAggregator
@@ -59,6 +60,9 @@ def main():
 
     blog_aggregator = BlogAggregator('index.html')
     print blog_aggregator.get_links()
+    feeds = blog_aggregator.aggregate()
+    with open('index.json', 'w') as fp:
+        json.dump(feeds, fp, indent=4, sort_keys=True, encoding='utf-8')
 
 if __name__ == '__main__':
     main()
