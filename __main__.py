@@ -1,6 +1,8 @@
 import argparse
 import logging
 
+from blog_aggregator import BlogAggregator
+
 
 logger = logging.getLogger()
 
@@ -54,6 +56,9 @@ def main():
     args = get_arguments()
     configure_logging(args.log_level)
     logger.info('info')
+
+    blog_aggregator = BlogAggregator('index.html')
+    print blog_aggregator.get_links()
 
 if __name__ == '__main__':
     main()
