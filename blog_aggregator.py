@@ -1,4 +1,12 @@
+import logging
+import socket
+
 from bs4 import BeautifulSoup
+import feedparser
+
+
+logger = logging.getLogger(__name__)
+socket.setdefaulttimeout(2)
 
 
 class BlogAggregator(object):
@@ -18,9 +26,15 @@ class BlogAggregator(object):
                 links.append(link)
         return links
 
-    def check_link(self, link):
-        #TODO: implement this
-        return self.ATOM
+    def get_feed_type(self, link):
+        feed = feedparser.parse(link)
+        if feed.get('version', None) in ['atom', 'atom01', 'atom02', 'atom03', 'atom10']:
+            return self.ATOM
+
+        if feed.get('version', None) in ['rss', 'rss090', 'rss091n', 'rss091u', 'rss092', 'rss093', 'rss094', 'rss10', 'rss20']:
+            return self.RSS
+
+        return None
 
     def aggregate(self):
         feeds = dict()
@@ -28,9 +42,10 @@ class BlogAggregator(object):
         feeds[self.RSS] = []
         links = self.get_links()
         for link in links:
-            type = self.check_link(link)
-            if type is self.ATOM:
+            feed_type = self.get_feed_type(link)
+            if feed_type is self.ATOM:
                 feeds[self.ATOM].append(link)
-            elif type is self.RSS:
+            elif feed_type is self.RSS:
                 feeds[self.RSS].append(link)
+
         return feeds

@@ -59,7 +59,6 @@ def main():
     logger.info('info')
 
     blog_aggregator = BlogAggregator('index.html')
-    print blog_aggregator.get_links()
     feeds = blog_aggregator.aggregate()
     with open('index.json', 'w') as fp:
         json.dump(feeds, fp, indent=4, sort_keys=True, encoding='utf-8')
