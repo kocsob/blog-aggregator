@@ -9,6 +9,7 @@ logger = logging.getLogger()
 
 
 def get_arguments():
+    """Get user input as command line arguments"""
     parser = argparse.ArgumentParser(description='Blog aggregator')
     parser.add_argument(
         '-i',
@@ -38,6 +39,7 @@ def get_arguments():
 
 
 def configure_logging(log_level="INFO"):
+    """Configure logging handler to standard error"""
     numeric_log_level = getattr(logging, log_level.upper(), None)
     if not isinstance(numeric_log_level, int):
         raise ValueError('Invalid log level: %s' % log_level)
@@ -54,6 +56,7 @@ def configure_logging(log_level="INFO"):
 
 
 def check_user_input(input_file, output_file):
+    """Check user input"""
     if os.path.exists(input_file) is False:
         raise ValueError("Input file '%s' does not exists!" % input_file)
 
@@ -72,10 +75,12 @@ def main():
     check_user_input(input_file, output_file)
 
     logger.info("Process started with input file '%s'" % input_file)
+
     blog_aggregator = BlogAggregator(input_file)
     feeds = blog_aggregator.aggregate()
     with open(output_file, 'w') as fp:
         json.dump(feeds, fp, indent=4, sort_keys=True, encoding='utf-8')
+
     logger.info("Process finished, the results are in output file '%s'" % output_file)
 
 

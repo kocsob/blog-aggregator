@@ -9,6 +9,10 @@ socket.setdefaulttimeout(5)
 
 
 class BlogAggregator(object):
+    """Blog aggregator service main class
+
+    The search engine that identifies links pointing to RSS or Atom feeds.
+    """
     ATOM = 'atom'
     RSS = 'rss'
 
@@ -19,7 +23,8 @@ class BlogAggregator(object):
             self.soup = BeautifulSoup(fp, 'html.parser')
 
     def get_links(self):
-        logger.debug("Get links from opended file")
+        """Returns the links (the href attributes of all <a> and <link> tags) from opened HTML file"""
+        logger.debug("Get links from opened file")
 
         links = []
         for tag in self.soup.find_all(['a', 'link']):
@@ -32,6 +37,7 @@ class BlogAggregator(object):
         return links
 
     def get_feed_type(self, link):
+        """Check the link points to an RSS or an Atom feed"""
         logger.debug("Get feed type for '%s'" % link)
 
         feed = feedparser.parse(link)
@@ -47,6 +53,7 @@ class BlogAggregator(object):
         return None
 
     def aggregate(self):
+        """Returns the aggregated links that point to RSS or Atom feed"""
         logger.debug("Aggregate feeds from opened file")
 
         feeds = dict()
